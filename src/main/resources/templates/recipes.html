@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Gusto in Tavola
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="/css/main-style.css"/>
+    <link rel="stylesheet" href="/css/topbar.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+
+    <link rel="stylesheet" href="/css/filterbar.css"/>
+    <link rel="stylesheet" href="/css/recipes.css"/>
+    <link rel="stylesheet" href="/css/recipe-card.css"/>
+</head>
+
+<body>
+    <div class="topbar">
+        <div class="title">Recipe Site</div>
+
+        <nav id="navigation" class="site-navigation" role="navigation">
+            <ul class="menu">
+                <a href="/"><li class="menu-item">Home</li></a>
+                <a href="/about"><li class="menu-item">About</li></a>
+                <a href="/cooks"><li class="menu-item">Vedi Cuochi</li></a>
+                <li class="menu-item">Ricette
+                    <ul class="dropdown">
+                        <a href="/recipes/new"><li class="menu-item sub-menu">Crea Ricetta</li></a>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="search-container">
+            <div class="search-bar-box">
+                <form action="/search" method="GET">
+                    <input type="text" class="search-bar-input" name="txt" onmouseout="this.value = ''; this.blur();">
+                </form>
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <div class="userInfo">
+            <div th:if="${userDetails}">
+                <span th:text="${userDetails.username}"></span>
+                <a href="/logout">Logout</a>
+            </div>
+            <div th:unless="${userDetails}">
+                <a href="/login">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="filter">
+            Filtra per:
+        </div>
+
+        <div class="radio-inputs">
+            <label class="radio">
+                <input type="radio" name="radio" checked="">
+                <span class="name">Difficolta</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio">
+                <span class="name">Costo</span>
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="radio">
+                <span class="name">Velocità</span>
+            </label>
+        </div>
+
+        <div class="recipes-grid" th:if="${recipes.isEmpty()}">
+            Non ci sono ricette nel sistema
+        </div>
+        <div class="recipes-grid" th:each="recipe : ${recipes}">
+            <div class="card">
+                <div class="card-image">
+                    <img th:src="@{'/image/' + ${recipe.image.id}}" alt="Recipe Image">
+                </div>
+                <div class="category" th:text="${recipe.category}"> Illustration </div>
+                <div class="name" th:text="${recipe.name}">Name</div>
+                <div class="time" th:text="${recipe.cookingTime} + ' minuti'">Time to prepare</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+    </footer>
+
+</body>
+
+</html>

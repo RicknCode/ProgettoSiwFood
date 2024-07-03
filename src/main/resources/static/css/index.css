@@ -1,0 +1,41 @@
+.intro-section {
+    background-image: url('/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.food-grid {
+    border: 1px solid #ccc;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.food {
+    flex: 0 0 250px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: 2px;
+    border: 1px solid #ccc;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.food:hover {
+    transform: scale(1.1);
+}
+
+.food img {
+    width: 100%;
+    height: auto;
+}

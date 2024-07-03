@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Gusto in Tavola - Registrati
+    </title>
+
+    <link rel="stylesheet" href="/css/main-style.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+
+    <link rel="stylesheet" href="/css/login.css"/>
+</head>
+
+<body>
+    <div class="logo"><a href="/">Gusto in tavola</a></div>
+
+    <form class="form" th:action="@{/register}" method="POST">
+        <p class="form-title">Crea un account</p>
+        <div class="input-container">
+            <input name="name" type="text" placeholder="Inserisci il tuo nome..."/>
+        </div>
+        <div class="input-container">
+            <input name="surname" type="text" placeholder="Inserisci il tuo cognome..."/>
+        </div>
+        <div class="input-container">
+            <input name="email" type="email" placeholder="Inserisci la tua email..."/>
+        </div>
+        <div class="input-container">
+            <input name="username" type="text" placeholder="Inserisci il tuo Username..."/>
+        </div>
+        <div class="input-container">
+            <input name="password" type="password" placeholder="Inserisci la tua password..."/>
+        </div>
+        <div class="input-container">
+            <input name="confirm-password" type="password" placeholder="Reinserisci la tua password..."/>
+        </div>
+        <div class="error-message" id="errorMessage" style="color: red; display: none;">
+            Passwords do not match.
+        </div>
+        <button type="submit" class="submit">Continua</button>
+        <p class="signup-link">
+            Hai già un account?
+            <a th:href="@{/login}" th:text="Login">Login</a>
+        </p>
+    </form>
+
+    <footer class="footer">
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+    </footer>
+</body>
+</html>

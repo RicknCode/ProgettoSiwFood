@@ -1,0 +1,40 @@
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.filter {
+    display: flex;
+    align-items: left;
+    margin: 10px;
+}
+
+.recipes-grid {
+    border: 1px solid #ccc;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.recipe {
+    flex: 0 0 250px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: 2px;
+    border: 1px solid #ccc;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.recipe:hover {
+    transform: scale(1.1);
+}
+
+.recipe img {
+    width: 100%;
+    height: auto;
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>
+		Gusto in Tavola
+	</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+	<link rel="stylesheet" href="/css/main-style.css"/>
+	<link rel="stylesheet" href="/css/topbar.css"/>
+	<link rel="stylesheet" href="/css/footer.css"/>
+
+	<link rel="stylesheet" href="/css/form.css"/>
+	<link rel="stylesheet" href="/css/dropdown.css"/>
+</head>
+
+<body>
+	<div class="topbar">
+		<div class="title">Recipe Site</div>
+
+		<nav id="navigation" class="site-navigation" role="navigation">
+			<ul class="menu">
+				<a href="/"><li class="menu-item">Home</li></a>
+				<a href="/about"><li class="menu-item">About</li></a>
+				<a href="/cooks"><li class="menu-item">Vedi Cuochi</li></a>
+				<li class="menu-item">Ricette
+					<ul class="dropdown">
+						<a href="/recipes"><li class="menu-item sub-menu">Vedi Ricette</li></a>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+
+		<div class="search-container">
+			<div class="search-bar-box">
+				<form action="/search" method="GET">
+					<input type="text" class="search-bar-input" name="txt" onmouseout="this.value = ''; this.blur();">
+				</form>
+				<i class="fas fa-search"></i>
+			</div>
+		</div>
+
+		<div class="userInfo">
+			<div th:if="${userDetails}">
+				<span th:text="${userDetails.username}"></span>
+				<a href="/logout">Logout</a>
+			</div>
+			<div th:unless="${userDetails}">
+				<a href="/login">Login</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="content">
+		<form class="form" th:action="@{/recipe}" method="POST" th:object="${recipe}" enctype="multipart/form-data">
+			<div th:if="${#fields.hasGlobalErrors()}">
+				<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+			</div>
+			<div class="title">Aggiungi una ricetta<br><span>compila il form per aggiungere una ricetta</span></div>
+			<input class="input" type="text" th:field="${recipe.name}" placeholder="Nome della ricetta">
+
+			<div class="dropdown-container">
+				<div class="text">Categoria della ricetta:</div>
+				<select class="input" th:field="${recipe.category}" id="category">
+					<option th:each="category : ${categories}"
+							th:value="${category}" th:text="${category}">Categoria</option>
+				</select>
+			</div>
+
+			<div class="dropdown-container">
+				<div class="text">Scegli la difficoltà del piatto:</div>
+				<select class="input" th:field="${recipe.difficulty}" id="difficulty">
+					<option value="1">facile</option>
+					<option value="2">medio</option>
+					<option value="3">complesso</option>
+				</select>
+			</div>
+
+			<div class="text">Tempo medio per preparare la ricetta:</div>
+			<input class="input" type="number" th:field="${recipe.cookingTime}"/>
+			<div class="text">Costo complessivo della ricetta:</div>
+			<input class="input" type="number" th:field="${recipe.cost}"/>
+
+			<textarea th:field="${recipe.description}" rows="4" cols="50" placeholder="Descrizione della ricetta"></textarea>
+
+			<div id="ingredient-section">
+				<div th:each="ingredient : ${recipe.ingredients}" class="ingredient-container">
+					<input class="input" type="text" th:field="${ingredient.name}" placeholder="Nome dell'ingrediente"/>
+					<input class="input" type="number" th:field="${ingredient.quantity}" placeholder="Quantità"/>
+				</div>
+			</div>
+
+			<button type="button" onclick="addIngredient()" class="button">Aggiungi Ingrediente</button>
+
+			<div class="text">Se vuoi fornisci un immagine della ricetta:</div>
+			<div>
+				<input
+						name="file"
+						type="file"
+						id="file-upload"
+						accept="image/png, image/jpeg"
+						required>
+			</div>
+			<button class="button-confirm" type="submit">Conferma</button>
+		</form>
+	</div>
+
+	<footer class="footer">
+		<a href="/about">About Us</a>
+		<a href="/contact">Contact Us</a>
+	</footer>
+
+</body>
+
+<script>
+	function addIngredient() {
+    	var index = document.querySelectorAll('.ingredient-container').length;
+
+    	var newIngredientDiv = document.createElement('div');
+    	newIngredientDiv.classList.add('ingredient-container');
+
+    	var nameInput = document.createElement('input');
+    	nameInput.setAttribute('class', 'input');
+    	nameInput.setAttribute('type', 'text');
+    	nameInput.setAttribute('name', 'recipe.ingredients[' + index + '].name');
+    	nameInput.setAttribute('placeholder', 'Nome dell\'ingrediente');
+
+    	var quantityInput = document.createElement('input');
+    	quantityInput.setAttribute('class', 'input');
+    	quantityInput.setAttribute('type', 'number');
+    	quantityInput.setAttribute('name', 'recipe.ingredients[' + index + '].quantity');
+    	quantityInput.setAttribute('placeholder', 'Quantità');
+
+    	newIngredientDiv.appendChild(nameInput);
+    	newIngredientDiv.appendChild(quantityInput);
+
+    	document.getElementById('ingredient-section').appendChild(newIngredientDiv);
+	}
+</script>
+</html>

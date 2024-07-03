@@ -1,0 +1,130 @@
+.topbar {
+    position: fixed;
+    background-color: white;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ffd52d;
+    z-index: 1000;
+}
+
+.topbar .title {
+    font-size: 1.5rem;
+}
+
+.site-navigation {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+.site-navigation ul {
+    background: #3498DB;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.site-navigation li {
+    color: #fff;
+    background: #3498DB;
+    padding: 12px;
+    position: relative;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.site-navigation li:hover {
+    background: #52a6df;
+}
+
+.site-navigation li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Submenu */
+.site-navigation ul ul {
+    display: none;
+    position: absolute;
+    background: #52a6df;
+    width: max-content;
+    margin-top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.site-navigation ul ul li {
+    display: block;
+}
+
+.site-navigation ul ul li:hover {
+    background: #74b7e4;
+}
+
+.site-navigation li:hover > ul {
+    display: block;
+}
+
+.search-container{
+    height: 10vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    align-content: center;
+}
+
+.search-bar-box{
+    position: relative;
+}
+
+.search-bar-input {
+    padding: 10px;
+    width: 60px;
+    height: 60px;
+    background: none;
+    border: 3px solid #ffd52d;
+    border-radius: 30px;
+    box-sizing: border-box;
+    font-family: Comic Sans MS;
+    font-size: 20px;
+    color: #ffd52d;
+    outline: none;
+    transition: .5s;
+}
+.search-bar-box:hover input{
+    width: 250px;
+    background: #3b3640;
+    border-radius: 10px;
+}
+.search-bar-box i{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translate(-50%,-50%);
+    font-size: 20px;
+    color: #ffd52d;
+    transition: .2s;
+}
+.search-bar-box:hover i{
+    opacity: 0;
+    z-index: -1;
+}
+
+.topbar .userInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+    margin-right: 20px;
+}
