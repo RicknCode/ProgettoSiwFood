@@ -19,251 +19,290 @@
 </head>
 
 <body>
-<div class="topbar">
-    <div class="dropdown-button" id="barButton">
-        <i class="fas fa-bars"></i>
-    </div>
+    <div class="topbar">
+        <div class="dropdown-button" id="barButton">
+            <i class="fas fa-bars"></i>
+        </div>
 
-    <div class="overlay" id="overlay"></div>
-    <a class="title" href="/">Gusto in Tavola</a>
+        <div class="overlay" id="overlay"></div>
+        <a class="title" href="/">Gusto in Tavola</a>
 
-    <div class="search-container">
-        <div class="search-bar">
-            <form th:action="@{/search}" method="POST">
-                <input type="text" class="search-bar-input" name="keyword" placeholder="Cerca..." autocomplete="off">
-                <button class="search-bar-button" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
+        <div class="search-container">
+            <div class="search-bar">
+                <form th:action="@{/search}" method="POST">
+                    <input type="text" class="search-bar-input" name="keyword" placeholder="Cerca..." autocomplete="off">
+                    <button class="search-bar-button" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="userInfo">
+            <div sec:authorize="isAuthenticated()">
+                <label class="popup">
+                    <input type="checkbox">
+                    <div class="burger" tabindex="0">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <nav class="popup-window">
+                        <legend>Azioni</legend>
+                        <ul>
+                            <li>
+                                <a href="/profile/index" style="text-decoration: none; color: black;">
+                                    <button>
+                                        <span>Profilo</span>
+                                    </button>
+                                </a>
+                            </li>
+                            <hr>
+                            <li>
+                                <a href="/logout" style="text-decoration: none; color: black;">
+                                    <button>
+                                        <span>Logout</span>
+                                    </button>
+                                </a>
+                            </li>
+                            </hr>
+                        </ul>
+                    </nav>
+                </label>
+            </div>
+            <div sec:authorize="!isAuthenticated()">
+                <a class="login-button" href="/login" style="text-decoration: none; color: white;">
+                    <b>Accedi</b>
+                    <i class="fas fa-sign-in-alt"></i>
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="userInfo">
-        <div sec:authorize="isAuthenticated()">
-            <label class="popup">
-                <input type="checkbox">
-                <div class="burger" tabindex="0">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+    <div class="dropdown"  id="dropdown">
+        <div class="dropdown-object">
+            <div class="dropdown-close-button" id="dropdown-close-button">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        <div class="dropdown-object">
+            <i class="fas fa-home"></i>
+            <a href="/">Home</a>
+        </div>
+        <div class="dropdown-list">
+            <div class="list-name">
+                <i class="fas fa-utensils"></i>
+                <a href="/recipes">Ricette</a>
+            </div>
+            <div class="list">
+                <div class="list-box" th:each="category : ${categories}">
+                    <a th:href="@{'/recipes/' + ${#strings.toLowerCase(category.toString())}}"
+                       th:text="${#strings.capitalize(category.toString().toLowerCase().replace('_', ' '))}"></a>
                 </div>
-                <nav class="popup-window">
-                    <legend>Azioni</legend>
-                    <ul>
-                        <li>
-                            <a href="/profile" style="text-decoration: none; color: black;">
-                                <button>
-                                    <span>Profilo</span>
-                                </button>
-                            </a>
-                        </li>
-                        <hr>
-                        <li>
-                            <a href="/logout" style="text-decoration: none; color: black;">
-                                <button>
-                                    <span>Logout</span>
-                                </button>
-                            </a>
-                        </li>
-                        </hr>
-                    </ul>
-                </nav>
-            </label>
-        </div>
-        <div sec:authorize="!isAuthenticated()">
-            <a class="login-button" href="/login" style="text-decoration: none; color: white;">
-                <b>Accedi</b>
-                <i class="fas fa-sign-in-alt"></i>
-            </a>
-        </div>
-    </div>
-</div>
-
-<div class="dropdown"  id="dropdown">
-    <div class="dropdown-object">
-        <div class="dropdown-close-button" id="dropdown-close-button">
-            <i class="fas fa-times"></i>
-        </div>
-    </div>
-    <div class="dropdown-object">
-        <i class="fas fa-home"></i>
-        <a href="/">Home</a>
-    </div>
-    <div class="dropdown-list">
-        <div class="list-name">
-            <i class="fas fa-utensils"></i>
-            <a href="/">Ricette</a>
-        </div>
-        <div class="list">
-            <div class="list-box" th:each="category : ${categories}">
-                <a th:href="@{'/recipes/' + ${#strings.toLowerCase(category.toString())}}"
-                   th:text="${#strings.capitalize(category.toString().toLowerCase().replace('_', ' '))}"></a>
             </div>
         </div>
-    </div>
-    <div class="dropdown-object">
-        <i class="fas fa-user"></i>
-        <a href="/cooks">Cuochi</a>
-    </div>
-</div>
-
-
-<div class="content">
-    <h1>Il tuo Profilo</h1>
-    <div class="top">
-        <div class="n-results">
-            <p><b>Hai inserito <span th:text="${#lists.size(recipes)}" style="color: rgb(255, 150, 20)"></span> ricette</b></p>
+        <div class="dropdown-object">
+            <i class="fas fa-cookie"></i>
+            <a href="/cooks">Cuochi</a>
         </div>
-        <div class="filter">
-            <h1>Placeholder filtro</h1>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="option-container">
-            <a class="profile-index-option" href="/profile/index">
+        <div sec:authorize="hasRole('ROLE_COOK')">
+            <div class="dropdown-object-with-separator">
                 <i class="fas fa-user"></i>
-            </a>
-            <div class="option">
-                <a href="/profile/my-recipes">
-                    <i class="fas fa-utensils"></i>
-                    <span class="tooltiptext">Le tue ricette</span>
-                </a>
+                <a href="/profile/index">Il mio Profilo</a>
             </div>
-            <div class="option">
-                <a href="/profile/settings">
-                    <i class="fas fa-cog"></i>
-                    <span class="tooltiptext">Impostazioni</span>
-                </a>
+            <div class="dropdown-list">
+                <div class="list-name">
+                    <i class="fas fa-stroopwafel"></i>
+                    <p>Le mie ricette</p>
+                </div>
+                <div class="list">
+                    <div class="list-box">
+                        <a href="/profile/my-recipes">Visualizza le tue ricette</a>
+                    </div>
+                    <div class="list-box">
+                        <a href="/recipe/new">Crea una ricetta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="dropdown-object">
+                <h1>Admin</h1>
+            </div>
+            <div class="dropdown-object-with-separator">
+                <i class="far fa-user"></i>
+                <a href="/admin/add-cook">Registra un nuovo cuoco</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content">
+        <h1>Il tuo Profilo</h1>
+        <div class="top">
+            <div class="n-results">
+                <p><b>Hai inserito <span th:text="${#lists.size(recipes)}" style="color: rgb(255, 150, 20)"></span> ricette</b></p>
+            </div>
+            <div class="filter">
+                <h1>Placeholder filtro</h1>
             </div>
         </div>
 
-        <div class="recipes-container">
-             <div class="recipe" th:each="recipe : ${recipes}">
-                 <a class="recipe-img" th:href="@{'/my-recipe/' + ${recipe.id}}">
-                     <img th:src="@{'/image/' + ${recipe.image.id}}" alt="Recipe Image">
-                 </a>
-                 <div class="recipe-data">
-                     <a class="recipe-category" th:href="@{'/recipes/' + ${#strings.toLowerCase(recipe.category.toString())}}" th:text="${recipe.category}">Category</a>
-                     <a class="recipe-name"th:href="@{'/my-recipe/' + ${recipe.id}}" th:text="${recipe.name}">Name</a>
-                     <h1 class="recipe-description" th:text="${recipe.description}">Description</h1>
-                     <div class="recipe-useful">
-                         <div class="info-box">
-                             <i class="fas fa-book"></i>
-                             <div th:switch="${recipe.difficulty}">
-                                 <p th:case="1">facile</p>
-                                 <p th:case="2">media</p>
-                                 <p th:case="3">complessa</p>
+        <div class="container">
+            <div class="option-container">
+                <a class="profile-index-option" href="/profile/index">
+                    <i class="fas fa-user"></i>
+                </a>
+                <div class="option">
+                    <a href="/profile/my-recipes">
+                        <i class="fas fa-utensils"></i>
+                        <span class="tooltiptext">Le tue ricette</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="recipes-container">
+                 <div class="recipe" th:each="recipe : ${recipes}">
+                     <a class="recipe-img" th:href="@{'/my-recipe/' + ${recipe.id}}">
+                         <img th:src="@{'/image/' + ${recipe.image.id}}" alt="Recipe Image">
+                     </a>
+                     <div class="recipe-data">
+                         <a class="recipe-category" th:href="@{'/recipes/' + ${#strings.toLowerCase(recipe.category.toString())}}" th:text="${recipe.category}">Category</a>
+                         <a class="recipe-name"th:href="@{'/my-recipe/' + ${recipe.id}}" th:text="${recipe.name}">Name</a>
+                         <h1 class="recipe-description" th:text="${recipe.description}">Description</h1>
+                         <div class="recipe-useful">
+                             <div class="info-box">
+                                 <i class="fas fa-book"></i>
+                                 <div th:switch="${recipe.difficulty}">
+                                     <p th:case="1">facile</p>
+                                     <p th:case="2">media</p>
+                                     <p th:case="3">complessa</p>
+                                 </div>
+                             </div>
+                             <div class="info-box">
+                                 <i class="far fa-clock"></i>
+                                 <p th:text="${recipe.cookingTime}"></p>
+                                 <p>min</p>
+                             </div>
+                             <div class="info-box">
+                                 <i class="fas fa-money-bill-alt"></i>
+                                 <p th:text="${recipe.cost}"></p>
+                                 <p>$</p>
                              </div>
                          </div>
-                         <div class="info-box">
-                             <i class="far fa-clock"></i>
-                             <p th:text="${recipe.cookingTime}"></p>
-                             <p>min</p>
-                         </div>
-                         <div class="info-box">
-                             <i class="fas fa-money-bill-alt"></i>
-                             <p th:text="${recipe.cost}"></p>
-                             <p>$</p>
-                         </div>
-                     </div>
-                     <a class="read-link" th:href="@{'/my-recipe/' + ${recipe.id}}">LEGGI<i class="fas fa-angle-right"></i></a>
-                     <div sec:authorize="hasRole('ROLE_ADMIN')">
-                        <div class="admin-modify-button">
-                            <label class="popup">
-                                <input type="checkbox">
-                                <div class="burger" tabindex="0">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                <nav class="popup-window">
-                                    <legend>Azioni</legend>
-                                    <ul>
-                                        <li>
-                                            <a th:href="@{'/recipe/modify/' + ${recipe.id}}" style="text-decoration: none; color: black;">
-                                                <button>
-                                                    <span>Modifica ricetta</span>
-                                                </button>
-                                            </a>
-                                        </li>
-                                        <hr>
-                                        <li>
-                                            <a th:href="@{'/recipe/delete/' + ${recipe.id}}" style="text-decoration: none; color: black;">
-                                                <button>
-                                                    <span>Cancella ricetta</span>
-                                                </button>
-                                            </a>
-                                        </li>
-                                        </hr>
-                                    </ul>
-                                </nav>
-                            </label>
+                         <a class="read-link" th:href="@{'/my-recipe/' + ${recipe.id}}">LEGGI<i class="fas fa-angle-right"></i></a>
+                         <div sec:authorize="hasRole('ROLE_ADMIN')">
+                            <div class="admin-modify-button">
+                                <label class="popup">
+                                    <input type="checkbox">
+                                    <div class="burger" tabindex="0">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                    <nav class="popup-window">
+                                        <legend>Azioni</legend>
+                                        <ul>
+                                            <li>
+                                                <a th:href="@{'/recipe/modify/' + ${recipe.id}}" style="text-decoration: none; color: black;">
+                                                    <button>
+                                                        <span>Modifica ricetta</span>
+                                                    </button>
+                                                </a>
+                                            </li>
+                                            <hr>
+                                            <li>
+                                                <a th:href="@{'/recipe/delete/' + ${recipe.id}}" style="text-decoration: none; color: black;">
+                                                    <button>
+                                                        <span>Cancella ricetta</span>
+                                                    </button>
+                                                </a>
+                                            </li>
+                                            </hr>
+                                        </ul>
+                                    </nav>
+                                </label>
+                            </div>
                         </div>
-                    </div>
+                     </div>
                  </div>
-             </div>
+            </div>
         </div>
+
     </div>
 
-</div>
-
-<script>
-    document.getElementById('barButton').addEventListener('click', function() {
-        var dropdown = document.getElementById('dropdown');
-        var overlay = document.getElementById('overlay');
-
-        if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-            overlay.classList.remove('show');
-        } else {
-            dropdown.classList.add('show');
-            overlay.classList.add('show');
-        }
-    });
-
-    document.getElementById('overlay').addEventListener('click', function() {
-        var dropdown = document.getElementById('dropdown');
-        var overlay = document.getElementById('overlay');
-
-        if (dropdown.classList.contains('show')) {
-                dropdown.classList.remove('show');
-                overlay.classList.remove('show');
-            }
-    });
-
-    document.getElementById('dropdown-close-button').addEventListener('click', function() {
-        if (!event.target.matches('.dropdown-close-button')) {
+    <script>
+        document.getElementById('barButton').addEventListener('click', function() {
             var dropdown = document.getElementById('dropdown');
             var overlay = document.getElementById('overlay');
 
             if (dropdown.classList.contains('show')) {
                 dropdown.classList.remove('show');
                 overlay.classList.remove('show');
+            } else {
+                dropdown.classList.add('show');
+                overlay.classList.add('show');
             }
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            var overlay = document.getElementById('overlay');
+
+            if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    overlay.classList.remove('show');
+                }
+        });
+
+        document.getElementById('dropdown-close-button').addEventListener('click', function() {
+            if (!event.target.matches('.dropdown-close-button')) {
+                var dropdown = document.getElementById('dropdown');
+                var overlay = document.getElementById('overlay');
+
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    overlay.classList.remove('show');
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const dropdown = document.querySelector('.dropdown');
+
+            dropdown.addEventListener('wheel', function(event) {
+                const delta = event.deltaY || event.wheelDelta;
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const height = this.clientHeight;
+                const maxScrollTop = scrollHeight - height;
+
+                if ((scrollTop === 0 && delta < 0) || (scrollTop >= maxScrollTop && delta > 0)) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        let currentIndexes = {};
+
+        function slide(direction, index) {
+            const slider = document.getElementById('slider-container-' + index);
+            const sliderInner = slider.querySelector('.slider-inner');
+            const listItems = sliderInner.querySelectorAll('.list-item');
+            if (listItems.length <= 4) {
+                return;
+            }
+
+            const itemWidth = listItems[0].offsetWidth + 12;
+            const itemsVisible = 4;
+            const maxIndex = listItems.length - itemsVisible;
+
+            currentIndexes[index] = (currentIndexes[index] || 0) + direction;
+            if (currentIndexes[index] < 0) currentIndexes[index] = 0;
+            if (currentIndexes[index] > maxIndex) currentIndexes[index] = maxIndex;
+
+            sliderInner.style.transform = `translateX(${-currentIndexes[index] * itemWidth * itemsVisible}px)`;
         }
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchBarBox = document.getElementById('searchBarBox');
-        const searchInput = searchBarBox.querySelector('.search-bar-input');
-
-        // Toggle the search bar input on click
-        searchBarBox.addEventListener('click', function(event) {
-            if (!searchInput.classList.contains('active')) {
-                searchInput.classList.add('active');
-            }
-            event.stopPropagation(); // Prevents the document click listener from immediately closing the search bar
-        });
-
-        // Close search bar input on document click
-        document.addEventListener('click', function(event) {
-            if (!searchBarBox.contains(event.target)) {
-                searchInput.classList.remove('active');
-            }
-        });
-    });
-</script>
-
+    </script>
 </body>
 </html>

@@ -7,8 +7,13 @@
 	</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
 	<link rel="stylesheet" href="/css/main-style.css"/>
 	<link rel="stylesheet" href="/css/topbar.css"/>
+	<link rel="stylesheet" href="/css/user-dropdown.css"/>
 	<link rel="stylesheet" href="/css/footer.css"/>
 
 	<link rel="stylesheet" href="/css/form.css"/>
@@ -17,37 +22,118 @@
 
 <body>
 	<div class="topbar">
-		<div class="title">Recipe Site</div>
+		<div class="dropdown-button" id="barButton">
+			<i class="fas fa-bars"></i>
+		</div>
 
-		<nav id="navigation" class="site-navigation" role="navigation">
-			<ul class="menu">
-				<a href="/"><li class="menu-item">Home</li></a>
-				<a href="/about"><li class="menu-item">About</li></a>
-				<a href="/cooks"><li class="menu-item">Vedi Cuochi</li></a>
-				<li class="menu-item">Ricette
-					<ul class="dropdown">
-						<a href="/recipes"><li class="menu-item sub-menu">Vedi Ricette</li></a>
-					</ul>
-				</li>
-			</ul>
-		</nav>
+		<div class="overlay" id="overlay"></div>
+		<a class="title" href="/">Gusto in Tavola</a>
 
 		<div class="search-container">
-			<div class="search-bar-box">
-				<form action="/search" method="GET">
-					<input type="text" class="search-bar-input" name="txt" onmouseout="this.value = ''; this.blur();">
+			<div class="search-bar">
+				<form th:action="@{/search}" method="POST">
+					<input type="text" class="search-bar-input" name="keyword" placeholder="Cerca..." autocomplete="off">
+					<button class="search-bar-button" type="submit">
+						<i class="fas fa-search"></i>
+					</button>
 				</form>
-				<i class="fas fa-search"></i>
 			</div>
 		</div>
 
 		<div class="userInfo">
-			<div th:if="${userDetails}">
-				<span th:text="${userDetails.username}"></span>
-				<a href="/logout">Logout</a>
+			<div sec:authorize="isAuthenticated()">
+				<label class="popup">
+					<input type="checkbox">
+					<div class="burger" tabindex="0">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<nav class="popup-window">
+						<legend>Azioni</legend>
+						<ul>
+							<li>
+								<a href="/profile/index" style="text-decoration: none; color: black;">
+									<button>
+										<span>Profilo</span>
+									</button>
+								</a>
+							</li>
+							<hr>
+							<li>
+								<a href="/logout" style="text-decoration: none; color: black;">
+									<button>
+										<span>Logout</span>
+									</button>
+								</a>
+							</li>
+							</hr>
+						</ul>
+					</nav>
+				</label>
 			</div>
-			<div th:unless="${userDetails}">
-				<a href="/login">Login</a>
+			<div sec:authorize="!isAuthenticated()">
+				<a class="login-button" href="/login" style="text-decoration: none; color: white;">
+					<b>Accedi</b>
+					<i class="fas fa-sign-in-alt"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="dropdown"  id="dropdown">
+		<div class="dropdown-object">
+			<div class="dropdown-close-button" id="dropdown-close-button">
+				<i class="fas fa-times"></i>
+			</div>
+		</div>
+		<div class="dropdown-object">
+			<i class="fas fa-home"></i>
+			<a href="/">Home</a>
+		</div>
+		<div class="dropdown-list">
+			<div class="list-name">
+				<i class="fas fa-utensils"></i>
+				<a href="/recipes">Ricette</a>
+			</div>
+			<div class="list">
+				<div class="list-box" th:each="category : ${categories}">
+					<a th:href="@{'/recipes/' + ${#strings.toLowerCase(category.toString())}}"
+					   th:text="${#strings.capitalize(category.toString().toLowerCase().replace('_', ' '))}"></a>
+				</div>
+			</div>
+		</div>
+		<div class="dropdown-object">
+			<i class="fas fa-cookie"></i>
+			<a href="/cooks">Cuochi</a>
+		</div>
+		<div sec:authorize="hasRole('ROLE_COOK')">
+			<div class="dropdown-object-with-separator">
+				<i class="fas fa-user"></i>
+				<a href="/profile/index">Il mio Profilo</a>
+			</div>
+			<div class="dropdown-list">
+				<div class="list-name">
+					<i class="fas fa-stroopwafel"></i>
+					<p>Le mie ricette</p>
+				</div>
+				<div class="list">
+					<div class="list-box">
+						<a href="/profile/my-recipes">Visualizza le tue ricette</a>
+					</div>
+					<div class="list-box">
+						<a href="/recipe/new">Crea una ricetta</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div sec:authorize="hasRole('ROLE_ADMIN')">
+			<div class="dropdown-object">
+				<h1>Admin</h1>
+			</div>
+			<div class="dropdown-object-with-separator">
+				<i class="far fa-user"></i>
+				<a href="/admin/add-cook">Registra un nuovo cuoco</a>
 			</div>
 		</div>
 	</div>
@@ -102,10 +188,79 @@
 		</form>
 	</div>
 
-	<footer class="footer">
-		<a href="/about">About Us</a>
-		<a href="/contact">Contact Us</a>
-	</footer>
+	<script>
+		document.getElementById('barButton').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            var overlay = document.getElementById('overlay');
+
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                overlay.classList.remove('show');
+            } else {
+                dropdown.classList.add('show');
+                overlay.classList.add('show');
+            }
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            var overlay = document.getElementById('overlay');
+
+            if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    overlay.classList.remove('show');
+                }
+        });
+
+        document.getElementById('dropdown-close-button').addEventListener('click', function() {
+            if (!event.target.matches('.dropdown-close-button')) {
+                var dropdown = document.getElementById('dropdown');
+                var overlay = document.getElementById('overlay');
+
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    overlay.classList.remove('show');
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const dropdown = document.querySelector('.dropdown');
+
+            dropdown.addEventListener('wheel', function(event) {
+                const delta = event.deltaY || event.wheelDelta;
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const height = this.clientHeight;
+                const maxScrollTop = scrollHeight - height;
+
+                if ((scrollTop === 0 && delta < 0) || (scrollTop >= maxScrollTop && delta > 0)) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        let currentIndexes = {};
+
+        function slide(direction, index) {
+            const slider = document.getElementById('slider-container-' + index);
+            const sliderInner = slider.querySelector('.slider-inner');
+            const listItems = sliderInner.querySelectorAll('.list-item');
+            if (listItems.length <= 4) {
+                return;
+            }
+
+            const itemWidth = listItems[0].offsetWidth + 12;
+            const itemsVisible = 4;
+            const maxIndex = listItems.length - itemsVisible;
+
+            currentIndexes[index] = (currentIndexes[index] || 0) + direction;
+            if (currentIndexes[index] < 0) currentIndexes[index] = 0;
+            if (currentIndexes[index] > maxIndex) currentIndexes[index] = maxIndex;
+
+            sliderInner.style.transform = `translateX(${-currentIndexes[index] * itemWidth * itemsVisible}px)`;
+        }
+	</script>
 
 </body>
 </html>

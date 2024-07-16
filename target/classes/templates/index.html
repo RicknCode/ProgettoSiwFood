@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="/css/main-style.css"/>
     <link rel="stylesheet" href="/css/topbar.css"/>
     <link rel="stylesheet" href="/css/user-dropdown.css"/>
-    <link rel="stylesheet" href="/css/footer.css"/>
 
     <link rel="stylesheet" href="/css/index.css"/>
 </head>
@@ -125,10 +124,6 @@
                     </div>
                 </div>
             </div>
-            <div class="dropdown-object">
-                <i class="fas fa-cog"></i>
-                <a href="/profile/settings">Impostazioni</a>
-            </div>
         </div>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="dropdown-object">
@@ -165,11 +160,6 @@
             </div>
         </div>
     </div>
-
-    <footer class="footer">
-        <a href="/about-us">About Us</a>
-        <a href="/contact">Contact Us</a>
-    </footer>
 
     <script>
         document.getElementById('barButton').addEventListener('click', function() {

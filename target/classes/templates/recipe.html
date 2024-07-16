@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="/css/main-style.css"/>
     <link rel="stylesheet" href="/css/topbar.css"/>
     <link rel="stylesheet" href="/css/user-dropdown.css"/>
-    <link rel="stylesheet" href="/css/footer.css"/>
 
     <link rel="stylesheet" href="/css/recipe.css"/>
 </head>
@@ -93,7 +92,7 @@
         <div class="dropdown-list">
             <div class="list-name">
                 <i class="fas fa-utensils"></i>
-                <a href="/">Ricette</a>
+                <a href="/recipes">Ricette</a>
             </div>
             <div class="list">
                 <div class="list-box" th:each="category : ${categories}">
@@ -103,8 +102,37 @@
             </div>
         </div>
         <div class="dropdown-object">
-            <i class="fas fa-user"></i>
+            <i class="fas fa-cookie"></i>
             <a href="/cooks">Cuochi</a>
+        </div>
+        <div sec:authorize="hasRole('ROLE_COOK')">
+            <div class="dropdown-object-with-separator">
+                <i class="fas fa-user"></i>
+                <a href="/profile/index">Il mio Profilo</a>
+            </div>
+            <div class="dropdown-list">
+                <div class="list-name">
+                    <i class="fas fa-stroopwafel"></i>
+                    <p>Le mie ricette</p>
+                </div>
+                <div class="list">
+                    <div class="list-box">
+                        <a href="/profile/my-recipes">Visualizza le tue ricette</a>
+                    </div>
+                    <div class="list-box">
+                        <a href="/recipe/new">Crea una ricetta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="dropdown-object">
+                <h1>Admin</h1>
+            </div>
+            <div class="dropdown-object-with-separator">
+                <i class="far fa-user"></i>
+                <a href="/admin/add-cook">Registra un nuovo cuoco</a>
+            </div>
         </div>
     </div>
 
@@ -180,16 +208,11 @@
         </div>
     </div>
 
-<footer class="footer">
-    <a href="/about">About Us</a>
-    <a href="/contact">Contact</a>
-</footer>
-
     <script>
         document.getElementById('barButton').addEventListener('click', function() {
             var dropdown = document.getElementById('dropdown');
             var overlay = document.getElementById('overlay');
-                
+
             if (dropdown.classList.contains('show')) {
                 dropdown.classList.remove('show');
                 overlay.classList.remove('show');
@@ -198,49 +221,65 @@
                 overlay.classList.add('show');
             }
         });
-    
+
         document.getElementById('overlay').addEventListener('click', function() {
             var dropdown = document.getElementById('dropdown');
             var overlay = document.getElementById('overlay');
-        
+
             if (dropdown.classList.contains('show')) {
                     dropdown.classList.remove('show');
                     overlay.classList.remove('show');
                 }
         });
-    
+
         document.getElementById('dropdown-close-button').addEventListener('click', function() {
             if (!event.target.matches('.dropdown-close-button')) {
                 var dropdown = document.getElementById('dropdown');
                 var overlay = document.getElementById('overlay');
-            
+
                 if (dropdown.classList.contains('show')) {
                     dropdown.classList.remove('show');
                     overlay.classList.remove('show');
                 }
             }
         });
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchBarBox = document.getElementById('searchBarBox');
-            const searchInput = searchBarBox.querySelector('.search-bar-input');
-            
-            // Toggle the search bar input on click
-            searchBarBox.addEventListener('click', function(event) {
-                if (!searchInput.classList.contains('active')) {
-                    searchInput.classList.add('active');
-                }
-                event.stopPropagation(); // Prevents the document click listener from immediately closing the search bar
-            });
-        
-            // Close search bar input on document click
-            document.addEventListener('click', function(event) {
-                if (!searchBarBox.contains(event.target)) {
-                    searchInput.classList.remove('active');
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const dropdown = document.querySelector('.dropdown');
+
+            dropdown.addEventListener('wheel', function(event) {
+                const delta = event.deltaY || event.wheelDelta;
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const height = this.clientHeight;
+                const maxScrollTop = scrollHeight - height;
+
+                if ((scrollTop === 0 && delta < 0) || (scrollTop >= maxScrollTop && delta > 0)) {
+                    event.preventDefault();
                 }
             });
         });
-    </script>
 
+        let currentIndexes = {};
+
+        function slide(direction, index) {
+            const slider = document.getElementById('slider-container-' + index);
+            const sliderInner = slider.querySelector('.slider-inner');
+            const listItems = sliderInner.querySelectorAll('.list-item');
+            if (listItems.length <= 4) {
+                return;
+            }
+
+            const itemWidth = listItems[0].offsetWidth + 12;
+            const itemsVisible = 4;
+            const maxIndex = listItems.length - itemsVisible;
+
+            currentIndexes[index] = (currentIndexes[index] || 0) + direction;
+            if (currentIndexes[index] < 0) currentIndexes[index] = 0;
+            if (currentIndexes[index] > maxIndex) currentIndexes[index] = maxIndex;
+
+            sliderInner.style.transform = `translateX(${-currentIndexes[index] * itemWidth * itemsVisible}px)`;
+        }
+    </script>
 </body>
 </html>

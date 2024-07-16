@@ -88,8 +88,3 @@ public class AuthConfiguration {
     }
 
 }
-
-//TODO
-//SHOW OTHER COOKS IN COOK VIEW
-//MIMIC RECIPE VIEW PAGE FOR COOK
-//ADD BIG SLIDER TO INDEX
