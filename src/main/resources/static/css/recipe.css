@@ -1,0 +1,163 @@
+.content {
+    background-color: white;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-modify-button {
+    position: absolute;
+    top: 21%;
+    right: 25%;
+}
+
+.category {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    margin-left: 210px;
+    color: rgb(255, 150, 20); 
+}
+
+.recipe-name {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    margin-left: 200px;
+    color: rgb(88, 75, 105);
+    font-size: 1.5rem;
+}
+
+.recipe-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+}
+
+.recipe-image img {
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
+}
+
+.recipe-info {
+    background-color: rgb(225, 240, 221);
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    text-align: left;
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.recipe-info p {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.recipe-info .difficulty {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.recipe-info .cooking-time {
+    margin-left: 5px;
+}
+
+.recipe-info .cost {
+    margin-left: 5px;
+}
+
+.recipe-description {
+    width: 100%;
+    text-align: center;
+}
+
+.recipe-ingredients {
+    background-color: rgb(247, 246, 248);
+    width: 100%;
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+    padding-top: 120px;
+}
+
+.recipe-ingredients .ingredient-box {
+    flex: 0 0 calc(33.33%);
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+    min-height: 80px;
+}
+
+.ingredient-box i {
+    color: gold;
+}
+
+.ingredient-box h1 {
+    font-size: 1rem;
+    flex: 1 1 100%;
+    margin: 0;
+}
+
+.ingredient-title-text {
+    position: absolute;
+    top: 0;
+    left: 20px;
+}
+
+.underline-with-distance {
+    margin-left: 50px;
+    font-size: calc(var(--font-size) + 0.8rem);
+    position: relative;
+    display: inline-block;
+}
+
+.underline-with-distance::after {
+    content: "";
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    width: 33%;
+    height: 2px;
+    background-color: rgb(255, 150, 20);
+}
+
+@media (max-width: 1000px) {
+    :root {
+        --font-size: 0.6rem;
+    }
+
+    .admin-modify-button {
+        position: absolute;
+        top: 21%;
+        right: 10%;
+    }
+    
+
+    .recipe-img {
+        width: 30%;
+    }
+
+    .recipe {
+        height: 15%;
+        min-height: 0;
+    }
+
+    .recipe-description {
+        display: none;
+    }
+
+    .recipe-useful {
+        padding-top: 40px;
+    }
+}

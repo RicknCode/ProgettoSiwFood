@@ -2,7 +2,10 @@ package com.uniroma3.prog.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -11,14 +14,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @NotBlank
     private String name;
-    @NotBlank
     private String surname;
-    @NotBlank
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private LocalDate birthDate;
     private String email;
-    private String username;
+    @OneToOne
+    private Image image;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Recipe> recipes;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Credentials credentials;
 
     public Long getId() {
         return id;
@@ -44,6 +52,30 @@ public class User {
         this.surname = surname;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
+
     public @NotBlank String getEmail() {
         return email;
     }
@@ -52,12 +84,12 @@ public class User {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public Credentials getCredentials() {
+        return credentials;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
     }
 
     @Override

@@ -6,8 +6,10 @@ import com.uniroma3.prog.model.Credentials;
 
 import java.util.Optional;
 
-public interface CredentialsRepository  extends CrudRepository<Credentials, Long> {
+public interface CredentialsRepository extends CrudRepository<Credentials, Long> {
 
-    public Optional<Credentials> findByUsername(String username);
+    Optional<Credentials> findByUsername(String username);
+
+    boolean existsByUsername(String username);
 
 }

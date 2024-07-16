@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Gusto in Tavola
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/main-style.css"/>
+    <link rel="stylesheet" href="/css/topbar.css"/>
+    <link rel="stylesheet" href="/css/user-dropdown.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+../../static
+    <link rel="stylesheet" href="/css/profile-index.css"/>
+</head>
+
+<body>
+<div class="topbar">
+    <div class="dropdown-button" id="barButton">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <a class="title" href="/">Gusto in Tavola</a>
+
+    <div class="search-container">
+        <div class="search-bar">
+            <form th:action="@{/search}" method="POST">
+                <input type="text" class="search-bar-input" name="keyword" placeholder="Cerca..." autocomplete="off">
+                <button class="search-bar-button" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="userInfo">
+        <div sec:authorize="isAuthenticated()">
+            <label class="popup">
+                <input type="checkbox">
+                <div class="burger" tabindex="0">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <nav class="popup-window">
+                    <legend>Azioni</legend>
+                    <ul>
+                        <li>
+                            <a href="/profile" style="text-decoration: none; color: black;">
+                                <button>
+                                    <span>Profilo</span>
+                                </button>
+                            </a>
+                        </li>
+                        <hr>
+                        <li>
+                            <a href="/logout" style="text-decoration: none; color: black;">
+                                <button>
+                                    <span>Logout</span>
+                                </button>
+                            </a>
+                        </li>
+                        </hr>
+                    </ul>
+                </nav>
+            </label>
+        </div>
+        <div sec:authorize="!isAuthenticated()">
+            <a class="login-button" href="/login" style="text-decoration: none; color: white;">
+                <b>Accedi</b>
+                <i class="fas fa-sign-in-alt"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="dropdown"  id="dropdown">
+    <div class="dropdown-object">
+        <div class="dropdown-close-button" id="dropdown-close-button">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
+    <div class="dropdown-object">
+        <i class="fas fa-home"></i>
+        <a href="/">Home</a>
+    </div>
+    <div class="dropdown-list">
+        <div class="list-name">
+            <i class="fas fa-utensils"></i>
+            <a href="/">Ricette</a>
+        </div>
+        <div class="list">
+            <div class="list-box" th:each="category : ${categories}">
+                <a th:href="@{'/recipes/' + ${#strings.toLowerCase(category.toString())}}"
+                   th:text="${#strings.capitalize(category.toString().toLowerCase().replace('_', ' '))}"></a>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown-object">
+        <i class="fas fa-user"></i>
+        <a href="/cooks">Cuochi</a>
+    </div>
+</div>
+
+
+<div class="content">
+    <h1>Il tuo Profilo</h1>
+
+    <div class="container">
+        <div class="option-container">
+            <a class="profile-index-option" href="/profile/index">
+                <i class="fas fa-user"></i>
+            </a>
+            <div class="option">
+                <a href="/profile/my-recipes">
+                    <i class="fas fa-utensils"></i>
+                    <span class="tooltiptext">Le tue ricette</span>
+                </a>
+            </div>
+            <div class="option">
+                <a href="/profile/settings">
+                    <i class="fas fa-cog"></i>
+                    <span class="tooltiptext">Impostazioni</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="box-options-container">
+            <div class="box-option">
+                <img src="https://www.giallozafferano.it/style/images/gz-placeholder-index.jpg">
+                <div class="overlay"></div>
+                <p>Le tue ricette</p>
+            </div>
+            <div class="box-option">
+                <img src="data:image/jpeg;base64,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">
+                <div class="overlay"></div>
+                <p>Impostazioni</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="footer">
+    <a href="/about-us">About Us</a>
+    <a href="/contact">Contact Us</a>
+</footer>
+
+<script>
+    document.getElementById('barButton').addEventListener('click', function() {
+        var dropdown = document.getElementById('dropdown');
+        var overlay = document.getElementById('overlay');
+
+        if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+            overlay.classList.remove('show');
+        } else {
+            dropdown.classList.add('show');
+            overlay.classList.add('show');
+        }
+    });
+
+    document.getElementById('overlay').addEventListener('click', function() {
+        var dropdown = document.getElementById('dropdown');
+        var overlay = document.getElementById('overlay');
+
+        if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                overlay.classList.remove('show');
+            }
+    });
+
+    document.getElementById('dropdown-close-button').addEventListener('click', function() {
+        if (!event.target.matches('.dropdown-close-button')) {
+            var dropdown = document.getElementById('dropdown');
+            var overlay = document.getElementById('overlay');
+
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                overlay.classList.remove('show');
+            }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchBarBox = document.getElementById('searchBarBox');
+        const searchInput = searchBarBox.querySelector('.search-bar-input');
+
+        // Toggle the search bar input on click
+        searchBarBox.addEventListener('click', function(event) {
+            if (!searchInput.classList.contains('active')) {
+                searchInput.classList.add('active');
+            }
+            event.stopPropagation(); // Prevents the document click listener from immediately closing the search bar
+        });
+
+        // Close search bar input on document click
+        document.addEventListener('click', function(event) {
+            if (!searchBarBox.contains(event.target)) {
+                searchInput.classList.remove('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.uniroma3.prog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,11 @@ public class CredentialsService {
     }
 
     @Transactional
+    public boolean existsByUsername(String username) {
+        return credentialsRepository.existsByUsername(username);
+    }
+
+    @Transactional
     public Credentials getCredentials(String username) {
         Optional<Credentials> result = this.credentialsRepository.findByUsername(username);
         return result.orElse(null);
@@ -35,4 +41,5 @@ public class CredentialsService {
         credentials.setPassword(this.passwordEncoder.encode(credentials.getPassword()));
         return this.credentialsRepository.save(credentials);
     }
+    
 }

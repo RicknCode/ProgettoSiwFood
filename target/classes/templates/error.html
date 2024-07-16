@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
+<body>
+<h1>Error</h1>
+<p th:text="${errorMessage}"></p>
+<p th:if="${exceptionMessage}" th:text="${'Exception Message: ' + exceptionMessage}"></p>
+<p th:if="${exceptionClass}" th:text="${'Exception Type: ' + exceptionClass}"></p>
+</body>
+</html>

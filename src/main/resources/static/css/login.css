@@ -1,12 +1,12 @@
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.logo {
+  margin-top: 30px;
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .form {
-  margin: 80px;
+  margin: 50px;
   background-color: #fff;
   display: block;
   padding: 1rem;
@@ -36,7 +36,7 @@ body {
 .input-container input {
   background-color: #fff;
   padding: 1rem;
-  padding-right: 3rem;
+  padding-right: 2rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
   width: 300px;

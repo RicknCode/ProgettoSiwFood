@@ -1,0 +1,92 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.admin-modify-button {
+    position: absolute;
+    top: 40%;
+    right: 20%;
+}
+
+.underline-with-distance {
+    margin-top: 40px;
+    font-size: calc(var(--font-size) + 0.3rem);
+    position: relative;
+    display: inline-block;
+}
+
+.underline-with-distance::after {
+    content: "";
+    position: absolute;
+    bottom: -9px;
+    left: 37.5%;
+    width: 25%;
+    height: 3px;
+    background-color: rgb(255, 150, 20);
+}
+
+.underline-with-distance2 {
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-right: auto;
+    font-size: calc(var(--font-size) + 0.2rem);
+    position: relative;
+    display: inline-block;
+}
+
+.underline-with-distance2::after {
+    content: "";
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    width: 25%;
+    height: 3px;
+    background-color: rgb(255, 150, 20);
+}
+
+.email-text {
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: left;
+    width: 100%;
+    padding-left: 50px;
+}
+
+.cook-img img {
+    margin-top: 20px;
+    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+}
+
+.cook-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+}
+
+.cook-img img {
+    margin-top: 20px;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.cook-name {
+    font-size: calc(var(--font-size) - 0.1rem);
+    text-align: center;
+}
+
+.recipes-container {
+    width: 100%;
+}

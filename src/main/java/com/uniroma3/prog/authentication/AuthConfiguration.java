@@ -27,14 +27,26 @@ public class AuthConfiguration {
     private DataSource dataSource;
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
+    private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Autowired
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .authoritiesByUsernameQuery("SELECT username, role from credentials WHERE username=?")
-                .usersByUsernameQuery("SELECT username, password, 1 as enabled FROM credentials WHERE username=?");
+                .authoritiesByUsernameQuery(
+                        "SELECT credentials.username, role.name AS role " +
+                                "FROM credentials " +
+                                "JOIN user_roles ON credentials.id = user_roles.credentials_id " +
+                                "JOIN role ON user_roles.role_id = role.id " +
+                                "WHERE credentials.username = ?")
+                .usersByUsernameQuery(
+                        "SELECT username, password, 1 as enabled " +
+                                "FROM credentials " +
+                                "WHERE username = ?");
     }
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -50,18 +62,20 @@ public class AuthConfiguration {
         httpSecurity
                 .csrf().and().cors().disable()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/", "/index", "/register","/products","/product/**", "/css/**", "/images/**, /js/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/register","/product", "/login").permitAll()
-                .requestMatchers(HttpMethod.GET,"/cook/**").hasAnyAuthority(COOK_ROLE)
-                .requestMatchers(HttpMethod.POST,"/cook/**").hasAnyAuthority(COOK_ROLE)
-                .requestMatchers(HttpMethod.GET,"/admin/**").hasAnyAuthority(ADMIN_ROLE)
-                .requestMatchers(HttpMethod.POST,"/admin/**").hasAnyAuthority(ADMIN_ROLE)
+                .requestMatchers(HttpMethod.GET, "/", "/index", "/login", "/register", "/css/**", "/images/**", "/image/**", "/js/**", "/error").permitAll()
+                .requestMatchers(HttpMethod.GET, "/recipes", "/recipe/**", "/cooks", "/cook", "/about", "/recipes/**", "/cooks/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/register", "/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/cook").permitAll()
+                .requestMatchers(HttpMethod.GET, "/cook/**", "/recipe/new").hasAnyAuthority(COOK_ROLE)
+                .requestMatchers(HttpMethod.POST, "/cook/**").hasAnyAuthority(COOK_ROLE)
+                .requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
+                .requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .loginPage("/login")
                 .permitAll()
-                .defaultSuccessUrl("/success", true)
-                .failureUrl("/login?error=true")
+                .successHandler(customAuthenticationSuccessHandler)
+                .failureUrl("/login?error.html=true")
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -74,3 +88,8 @@ public class AuthConfiguration {
     }
 
 }
+
+//TODO
+//SHOW OTHER COOKS IN COOK VIEW
+//MIMIC RECIPE VIEW PAGE FOR COOK
+//ADD BIG SLIDER TO INDEX

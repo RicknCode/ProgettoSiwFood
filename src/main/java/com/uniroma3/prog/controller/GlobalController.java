@@ -14,6 +14,8 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalController {
 
+    public static final int MAX_PAGE_OBJECTS = 5;
+
     @ModelAttribute("userDetails")
     public UserDetails getUser() {
         UserDetails user = null;

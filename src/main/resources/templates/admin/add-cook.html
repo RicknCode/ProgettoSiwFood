@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Gusto in Tavola - Registrati
+    </title>
+
+    <link rel="stylesheet" href="/css/main-style.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+
+    <link rel="stylesheet" href="/css/login.css"/>
+</head>
+
+<body>
+<a class="logo" href="/">Gusto in tavola</a>
+
+<form class="form" th:action="@{/register}" th:object="${registrationForm}" method="POST" enctype="multipart/form-data"
+      onsubmit="return validateAndNormalizeForm()">
+    <p class="form-title">Registra un cuoco</p>
+
+    <div class="error-message" th:if="${error}" th:text="${error}" style="color: red;"></div>
+
+    <div class="input-container">
+        <input name="user.name" type="text" placeholder="Inserisci il tuo nome..." th:field="*{user.name}" />
+        <div id="name-error" class="error-message" style="color: red;"></div>
+    </div>
+    <div class="input-container">
+        <input name="user.surname" type="text" placeholder="Inserisci il tuo cognome..." th:field="*{user.surname}" />
+        <div id="surname-error" class="error-message" style="color: red;"></div>
+    </div>
+    <div class="input-container">
+        <input name="user.birthDate" type="date" placeholder="Data di nascita" th:field="*{user.birthDate}" />
+        <div id="birthDate-error" class="error-message" style="color: red;"></div>
+    </div>
+    <div class="input-container">
+        <input name="user.email" type="email" placeholder="Inserisci la tua email..." th:field="*{user.email}" />
+        <div id="email-error" class="error-message" style="color: red;"></div>
+    </div>
+    <div class="input-container">
+        <input name="credentials.username" type="text" placeholder="Inserisci il tuo Username..."
+               th:field="*{credentials.username}" />
+        <div id="username-error" class="error-message" style="color: red;"></div>
+    </div>
+    <div class="input-container">
+        <input name="credentials.password" type="password" placeholder="Inserisci la tua password..."
+               th:field="*{credentials.password}" />
+        <div id="password-error" class="error-message" style="color: red;"></div>
+    </div>
+    <div class="input-container">
+        <input name="confirm-password" type="password" placeholder="Reinserisci la tua password..." />
+        <div id="confirm-password-error" class="error-message" style="color: red;"></div>
+    </div>
+    <div class="text">Fornisci un immagine profilo:</div>
+    <div class="input-container">
+        <input name="file" type="file" id="file-upload" accept="image/png, image/jpeg" th:field="*{file}"
+               required>
+        <div id="file-error" class="error-message" style="color: red;"></div>
+    </div>
+
+    <button type="submit" class="submit">Continua</button>
+
+</form>
+
+<footer class="footer">
+    <a href="/about">About Us</a>
+    <a href="/contact">Contact Us</a>
+</footer>
+
+<script>
+    function validateAndNormalizeForm() {
+        const errorMessages = document.getElementsByClassName('error-message');
+        for (let i = 0; i < errorMessages.length; i++) {
+            errorMessages[i].textContent = '';
+        }
+
+        const nameInput = document.getElementsByName('user.name')[0];
+        const surnameInput = document.getElementsByName('user.surname')[0];
+        const birthDateInput = document.getElementsByName('user.birthDate')[0];
+        const emailInput = document.getElementsByName('user.email')[0];
+        const usernameInput = document.getElementsByName('credentials.username')[0];
+        const passwordInput = document.getElementsByName('credentials.password')[0];
+        const confirmPasswordInput = document.getElementsByName('confirm-password')[0];
+        const fileInput = document.getElementsByName('file')[0];
+
+        let isValid = true;
+
+        function normalizeInput(input) {
+            return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+        }
+
+        if (nameInput.value.trim() === '') {
+            document.getElementById('name-error').textContent = 'Inserisci il tuo nome';
+            isValid = false;
+        } else {
+            nameInput.value = normalizeInput(nameInput.value.trim());
+        }
+
+        if (surnameInput.value.trim() === '') {
+            document.getElementById('surname-error').textContent = 'Inserisci il tuo cognome';
+            isValid = false;
+        } else {
+            surnameInput.value = normalizeInput(surnameInput.value.trim());
+        }
+
+         if (birthDateInput.value.trim() === '') {
+                document.getElementById('birthDate-error').textContent = 'Inserisci la data di nascita';
+                isValid = false;
+            } else {
+                const birthDate = new Date(birthDateInput.value);
+                const eighteenYearsAgo = new Date();
+                eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+
+                if (birthDate > eighteenYearsAgo) {
+                    document.getElementById('birthDate-error').textContent = 'Devi avere almeno 18 anni';
+                    isValid = false;
+                }
+         }
+
+        if (emailInput.value.trim() === '') {
+            document.getElementById('email-error').textContent = 'Inserisci la tua email';
+            isValid = false;
+        }
+
+        if (usernameInput.value.trim() === '') {
+            document.getElementById('username-error').textContent = 'Inserisci il tuo Username';
+            isValid = false;
+        }
+
+        if (passwordInput.value.trim() === '') {
+            document.getElementById('password-error').textContent = 'Inserisci la tua password';
+            isValid = false;
+        }
+
+        if (confirmPasswordInput.value.trim() === '') {
+            document.getElementById('confirm-password-error').textContent = 'Reinserisci la tua password';
+            isValid = false;
+        } else if (passwordInput.value.trim() !== confirmPasswordInput.value.trim()) {
+            document.getElementById('confirm-password-error').textContent = 'Le password non corrispondono';
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>
+</body>
+</html>

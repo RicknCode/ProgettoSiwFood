@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Gusto in Tavola
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../static/css/main-style.css"/>
+    <link rel="stylesheet" href="../static/css/topbar.css"/>
+    <link rel="stylesheet" href="../static/css/user-dropdown.css"/>
+    <link rel="stylesheet" href="../static/css/footer.css"/>
+</head>
+
+<body>
+    <div class="topbar">
+        <div class="dropdown-button" id="barButton">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="overlay" id="overlay"></div>
+        <a class="title" href="/">Gusto in Tavola</a>
+
+        <div class="search-container">
+            <div class="search-bar">
+                <form th:action="@{/search}" method="POST">
+                    <input type="text" class="search-bar-input" name="keyword" placeholder="Cerca..." autocomplete="off">
+                    <button class="search-bar-button" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="userInfo">
+            <div sec:authorize="isAuthenticated()">
+                <label class="popup">
+                    <input type="checkbox">
+                    <div class="burger" tabindex="0">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <nav class="popup-window">
+                        <legend>Azioni</legend>
+                        <ul>
+                            <li>
+                                <a href="/profile/index" style="text-decoration: none; color: black;">
+                                    <button>
+                                        <span>Profilo</span>
+                                    </button>
+                                </a>
+                            </li>
+                            <hr>
+                            <li>
+                                <a href="/logout" style="text-decoration: none; color: black;">
+                                    <button>
+                                        <span>Logout</span>
+                                    </button>
+                                </a>
+                            </li>
+                            </hr>
+                        </ul>
+                    </nav>
+                </label>
+            </div>
+            <div sec:authorize="!isAuthenticated()">
+                <a class="login-button" href="/login" style="text-decoration: none; color: white;">
+                    <b>Accedi</b>
+                    <i class="fas fa-sign-in-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown"  id="dropdown">
+        <div class="dropdown-object">
+            <div class="dropdown-close-button" id="dropdown-close-button">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        <div class="dropdown-object">
+            <i class="fas fa-home"></i>
+            <a href="/">Home</a>
+        </div>
+        <div class="dropdown-list">
+            <div class="list-name">
+                <i class="fas fa-utensils"></i>
+                <a href="/">Ricette</a>
+            </div>
+            <div class="list">
+                <div class="list-box" th:each="category : ${categories}">
+                    <a th:href="@{'/recipes/' + ${#strings.toLowerCase(category.toString())}}"
+                       th:text="${#strings.capitalize(category.toString().toLowerCase().replace('_', ' '))}"></a>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown-object">
+            <i class="fas fa-user"></i>
+            <a href="/cooks">Cuochi</a>
+        </div>
+    </div>
+
+
+    <div class="content">
+
+
+    </div>
+
+    <footer class="footer">
+        <a href="/about-us">About Us</a>
+        <a href="/contact">Contact Us</a>
+    </footer>
+
+    <script>
+        document.getElementById('barButton').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            var overlay = document.getElementById('overlay');
+                
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                overlay.classList.remove('show');
+            } else {
+                dropdown.classList.add('show');
+                overlay.classList.add('show');
+            }
+        });
+    
+        document.getElementById('overlay').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            var overlay = document.getElementById('overlay');
+        
+            if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    overlay.classList.remove('show');
+                }
+        });
+    
+        document.getElementById('dropdown-close-button').addEventListener('click', function() {
+            if (!event.target.matches('.dropdown-close-button')) {
+                var dropdown = document.getElementById('dropdown');
+                var overlay = document.getElementById('overlay');
+            
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    overlay.classList.remove('show');
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBarBox = document.getElementById('searchBarBox');
+            const searchInput = searchBarBox.querySelector('.search-bar-input');
+            
+            // Toggle the search bar input on click
+            searchBarBox.addEventListener('click', function(event) {
+                if (!searchInput.classList.contains('active')) {
+                    searchInput.classList.add('active');
+                }
+                event.stopPropagation(); // Prevents the document click listener from immediately closing the search bar
+            });
+        
+            // Close search bar input on document click
+            document.addEventListener('click', function(event) {
+                if (!searchBarBox.contains(event.target)) {
+                    searchInput.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

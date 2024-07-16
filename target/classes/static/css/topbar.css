@@ -1,0 +1,203 @@
+.topbar {
+    position: fixed;
+    background-color: white;
+    top: 0;
+    width: 100%;
+    height: var(--topbar-height);
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ffd52d;
+    z-index: 50;
+}
+
+.topbar .dropdown-button {
+    color: gold;
+    font-size: 2rem;
+    margin-left: 20px;
+}
+
+.dropdown {
+    display: block;
+    position: fixed;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 52;
+    opacity: 0;
+    visibility: hidden;
+    transition: width 0.2s ease, opacity 0.3s ease, visibility 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.dropdown.show {
+    width: 300px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown-object {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    margin-left: 20px;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+.dropdown-object-with-separator {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    margin-left: 20px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-top: 1px solid rgb(222, 217, 227);
+}
+
+.dropdown-object a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown-object-with-separator a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown-close-button {
+    font-size: 2rem;
+    margin-top: 15px;
+}
+
+.dropdown-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 1rem;
+    background-color: rgb(247, 246, 248);
+    border-top: 1px solid rgb(222, 217, 227);
+    border-bottom: 1px solid rgb(222, 217, 227);
+    padding: 10px;
+    padding-left: 30px;
+    margin-bottom: 5px;
+}
+
+.dropdown-list a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+.list-name p {
+    margin-left: 15px;
+    display: inline;
+}
+
+.dropdown-list .list {
+    margin-left: 40px;
+    border-left: 1px solid gold;
+}
+
+.dropdown-list .list-box {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.dropdown-list .list a {
+    margin: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.topbar .overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(87, 67, 113, 0.9);
+    z-index: 51;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.topbar .title {
+    color: rgb(107, 39, 170);
+    font-weight: bold;
+    font-size: calc(var(--font-size) + 1rem);
+    margin-left: 20px;
+    margin-right: 50px;
+    text-decoration: none;
+}
+
+.search-container {
+    position: relative;
+    flex: 1;
+    margin: 10px;
+}
+
+.search-container .search-bar form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 32px;
+    border: 2px solid rgb(222, 217, 227);
+    border-radius: 30px;
+    padding: 0 5px;
+}
+
+.search-bar-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0 15px;
+}
+
+.search-container .search-bar-button {
+    font-size: 1rem;
+    background-color: rgb(245, 238, 248);
+    padding: 4px 15px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.topbar .userInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.login-button {
+    background-color: rgb(255, 150, 20);
+    padding: 9px 20px;
+    font-size: 1.0rem;
+    border-radius: 30px;
+    margin-left: 40px;
+}
+
+.popup {
+    margin-left: 80px;
+    margin-right: 40px;
+}

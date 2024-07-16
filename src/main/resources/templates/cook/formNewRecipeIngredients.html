@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Gusto in Tavola
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="/css/main-style.css"/>
+    <link rel="stylesheet" href="/css/topbar.css"/>
+    <link rel="stylesheet" href="/css/user-dropdown.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+
+    <link rel="stylesheet" href="/css/form.css"/>
+</head>
+
+<body>
+<div class="topbar">
+    <div class="title">Recipe Site</div>
+
+    <nav id="navigation" class="site-navigation" role="navigation">
+        <ul class="menu">
+            <a href="/"><li class="menu-item">Home</li></a>
+            <a href="/about"><li class="menu-item">About</li></a>
+            <a href="/cooks"><li class="menu-item">Vedi Cuochi</li></a>
+            <li class="menu-item">Ricette
+                <ul class="dropdown">
+                    <a href="/recipes"><li class="menu-item sub-menu">Vedi Ricette</li></a>
+                    <a href="/recipes/new"><li class="menu-item sub-menu">Crea Ricetta</li></a>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="search-container">
+        <div class="search-bar-box">
+            <form action="/search" method="GET">
+                <input type="text" class="search-bar-input" name="txt" onmouseout="this.value = ''; this.blur();">
+            </form>
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <div class="userInfo">
+        <div sec:authorize="isAuthenticated()">
+            <label class="popup">
+                <input type="checkbox">
+                <div class="burger" tabindex="0">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <nav class="popup-window">
+                    <legend>Actions</legend>
+                    <ul>
+                        <li>
+                            <a href="/profile" style="text-decoration: none; color: black;">
+                                <button>
+                                    <span>Profilo</span>
+                                </button>
+                            </a>
+                        </li>
+                        <li sec:authorize="!hasRole('ROLE_COOK')">
+                            <a href="/cooks/new" style="text-decoration: none; color: black;">
+                                <button>
+                                    <span>Diventa un cuoco</span>
+                                </button>
+                            </a>
+                        </li>
+                        <hr>
+                        <li>
+                            <a href="/logout" style="text-decoration: none; color: black;">
+                                <button>
+                                    <span>Logout</span>
+                                </button>
+                            </a>
+                        </li>
+                        </hr>
+                    </ul>
+                </nav>
+            </label>
+        </div>
+        <div sec:authorize="!isAuthenticated()">
+            <a href="/login" style="text-decoration: none; color: white;">
+                <div class="login-button">
+                    <b>Accedi</b>
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="content">
+    <form class="form" th:action="@{/recipe}" method="POST" th:object="${recipe}" enctype="multipart/form-data">
+        <div id="ingredient-section">
+            <div th:each="ingredient, iterStat : ${recipe.ingredients}" class="ingredient-container">
+                <input class="input" type="text" th:field="*{ingredients[__${iterStat.index}__].name}" placeholder="Nome dell'ingrediente"/>
+                <input class="input" type="number" th:field="*{ingredients[__${iterStat.index}__].quantity}" placeholder="Quantità"/>
+            </div>
+        </div>
+        <button class="button-confirm" type="submit">Conferma</button>
+    </form>
+</div>
+
+<footer class="footer">
+    <a href="/about">About Us</a>
+    <a href="/contact">Contact Us</a>
+</footer>
+
+</body>
+
+</html>

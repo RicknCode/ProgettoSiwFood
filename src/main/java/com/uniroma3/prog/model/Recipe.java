@@ -10,21 +10,25 @@ import jakarta.persistence.*;
 public class Recipe {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	@Enumerated(EnumType.STRING)
 	private Category category;
-	private int difficulty;
 	private int cookingTime;
 	private float cost;
 	private String description;
+	private int difficulty;
 
-	@OneToMany
-	private List<Ingredient> ingredients = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@OneToOne
 	private Image image;
+
+	@OneToMany
+	private List<Ingredient> ingredients = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -56,6 +60,14 @@ public class Recipe {
 
 	public void setDifficulty(int difficulty) {
 		this.difficulty = difficulty;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public int getCookingTime() {
@@ -113,8 +125,5 @@ public class Recipe {
 		Recipe other = (Recipe) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
 
 }

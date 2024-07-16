@@ -2,15 +2,8 @@ package com.uniroma3.prog.model;
 
 import java.util.Arrays;
 
+import jakarta.persistence.*;
 import org.apache.tomcat.util.codec.binary.Base64;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Image {
@@ -22,10 +15,8 @@ public class Image {
 	@Column
 	private byte[] imageData;
 
+	@Column(name = "mime_type")
 	private String mimeType;
-	
-//	@ManyToOne
-//	private Product product;
 	
 	public String generateBase64Image() {
 		return Base64.encodeBase64String(this.imageData);
@@ -46,14 +37,6 @@ public class Image {
 	public void setImageData(byte[] imageData) {
 		this.imageData = imageData;
 	}
-
-//	public Product getProduct() {
-//		return product;
-//	}
-//
-//	public void setProduct(Product product) {
-//		this.product = product;
-//	}
 
 	public String getMimeType() {
 		return mimeType;
@@ -82,8 +65,5 @@ public class Image {
 		Image other = (Image) obj;
 		return Arrays.equals(imageData, other.imageData);
 	}
-	
-	
-	
-	
+
 }

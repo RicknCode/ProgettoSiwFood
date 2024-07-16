@@ -7,110 +7,240 @@
     </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <link rel="stylesheet" href="/static/css/main-style.css"/>
-    <link rel="stylesheet" href="/static/css/topbar.css"/>
-    <link rel="stylesheet" href="/static/css/footer.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/static/css/index.css"/>
-    <link rel="stylesheet" href="/static/css/recipes.css"/>
+    <link rel="stylesheet" href="/css/main-style.css"/>
+    <link rel="stylesheet" href="/css/topbar.css"/>
+    <link rel="stylesheet" href="/css/user-dropdown.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+
+    <link rel="stylesheet" href="/css/recipe.css"/>
 </head>
 
 <body>
-<div class="topbar">
-    <div class="title">Recipe Site</div>
+    <div class="topbar">
+        <div class="dropdown-button" id="barButton">
+            <i class="fas fa-bars"></i>
+        </div>
 
-    <nav id="navigation" class="site-navigation" role="navigation">
-        <ul class="menu">
-            <li class="menu-item"><a href="/">Home</a></li>
-            <li class="menu-item"><a href="/about">About</a></li>
-            <li class="menu-item">Ricette
-                <ul class="dropdown">
-                    <li class="menu-item sub-menu"><a href="/recipes">Vedi Ricette</a></li>
-                    <li class="menu-item sub-menu"><a href="/recipes/new">Crea Ricette</a></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
+        <div class="overlay" id="overlay"></div>
+        <a class="title" href="/">Gusto in Tavola</a>
 
-    <div class="search-container">
-        <div class="search-bar-box">
-            <form action="/search" method="GET">
-                <input type="text" class="search-bar-input" name="txt" onmouseout="this.value = ''; this.blur();">
-            </form>
-            <i class="fas fa-search"></i>
+        <div class="search-container">
+            <div class="search-bar">
+                <form th:action="@{/search}" method="POST">
+                    <input type="text" class="search-bar-input" name="keyword" placeholder="Cerca..." autocomplete="off">
+                    <button class="search-bar-button" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="userInfo">
+            <div sec:authorize="isAuthenticated()">
+                <label class="popup">
+                    <input type="checkbox">
+                    <div class="burger" tabindex="0">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <nav class="popup-window">
+                        <legend>Azioni</legend>
+                        <ul>
+                            <li>
+                                <a href="/profile/index" style="text-decoration: none; color: black;">
+                                    <button>
+                                        <span>Profilo</span>
+                                    </button>
+                                </a>
+                            </li>
+                            <hr>
+                            <li>
+                                <a href="/logout" style="text-decoration: none; color: black;">
+                                    <button>
+                                        <span>Logout</span>
+                                    </button>
+                                </a>
+                            </li>
+                            </hr>
+                        </ul>
+                    </nav>
+                </label>
+            </div>
+            <div sec:authorize="!isAuthenticated()">
+                <a class="login-button" href="/login" style="text-decoration: none; color: white;">
+                    <b>Accedi</b>
+                    <i class="fas fa-sign-in-alt"></i>
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="userInfo">
-        <div th:if="${userDetails}">
-            <span th:text="${userDetails.username}"></span>
-            <a href="/logout">Logout</a>
+    <div class="dropdown"  id="dropdown">
+        <div class="dropdown-object">
+            <div class="dropdown-close-button" id="dropdown-close-button">
+                <i class="fas fa-times"></i>
+            </div>
         </div>
-        <div th:unless="${userDetails}">
-            <a href="/login">Login</a>
+        <div class="dropdown-object">
+            <i class="fas fa-home"></i>
+            <a href="/">Home</a>
+        </div>
+        <div class="dropdown-list">
+            <div class="list-name">
+                <i class="fas fa-utensils"></i>
+                <a href="/">Ricette</a>
+            </div>
+            <div class="list">
+                <div class="list-box" th:each="category : ${categories}">
+                    <a th:href="@{'/recipes/' + ${#strings.toLowerCase(category.toString())}}"
+                       th:text="${#strings.capitalize(category.toString().toLowerCase().replace('_', ' '))}"></a>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown-object">
+            <i class="fas fa-user"></i>
+            <a href="/cooks">Cuochi</a>
         </div>
     </div>
-</div>
 
+    <div class="content">
+        <div class="category">
+            <h2 th:text="${recipe.category}">category</h2>
+        </div>
+        <div class="recipe-name">
+            <h1 th:text="${recipe.name}">name</h1>
+        </div>
+        <div class="recipe-image">
+            <img th:src="@{'/image/' + ${recipe.image.id}}" alt="Recipe Image">
+        </div>
+        <div class="recipe-info">
+            <p>Difficolta:
+                <b class="difficulty">
+                    <span th:switch="${recipe.difficulty}">
+                        <span th:case="1">facile</span>
+                        <span th:case="2">media</span>
+                        <span th:case="3">complessa</span>
+                    </span>
+                </b>
+            </p>
+            <p>Preparazione: <b class="cooking-time"><span th:text="${recipe.cookingTime} + ' min'"></span></b></p>
+            <p>Costo: <b class="cost"><span th:text="${recipe.cost} + ' $'"></span></b></p>
+        </div>
+        <div class="recipe-description">
+            <h1>Descrizione della ricetta:</h1>
+            <p th:text="${recipe.description}">Description</p>
+        </div>
+        <div class="recipe-ingredients">
+            <div class="ingredient-title-text">
+                <h1 class="underline-with-distance">Ingredienti</h1>
+            </div>
+            <div class="ingredient-box" th:each="ingredient : ${recipe.ingredients}">
+                <i class="fas fa-dot-circle"></i>
+                <h1 th:text="|${ingredient.name} ${ingredient.quantity}g|"></h1>
+            </div>
+        </div>
 
-<div class="content">
-
-
-</div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="admin-modify-button">
+                <label class="popup">
+                    <input type="checkbox">
+                    <div class="burger" tabindex="0">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <nav class="popup-window">
+                        <legend>Azioni</legend>
+                        <ul>
+                            <li>
+                                <a th:href="@{'/recipe/modify/' + ${recipe.id}}" style="text-decoration: none; color: black;">
+                                    <button>
+                                        <span>Modifica ricetta</span>
+                                    </button>
+                                </a>
+                            </li>
+                            <hr>
+                            <li>
+                                <a th:href="@{'/recipe/delete/' + ${recipe.id}}" style="text-decoration: none; color: black;">
+                                    <button>
+                                        <span>Cancella ricetta</span>
+                                    </button>
+                                </a>
+                            </li>
+                            </hr>
+                        </ul>
+                    </nav>
+                </label>
+            </div>
+        </div>
+    </div>
 
 <footer class="footer">
     <a href="/about">About Us</a>
     <a href="/contact">Contact</a>
 </footer>
 
+    <script>
+        document.getElementById('barButton').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            var overlay = document.getElementById('overlay');
+                
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                overlay.classList.remove('show');
+            } else {
+                dropdown.classList.add('show');
+                overlay.classList.add('show');
+            }
+        });
+    
+        document.getElementById('overlay').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            var overlay = document.getElementById('overlay');
+        
+            if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    overlay.classList.remove('show');
+                }
+        });
+    
+        document.getElementById('dropdown-close-button').addEventListener('click', function() {
+            if (!event.target.matches('.dropdown-close-button')) {
+                var dropdown = document.getElementById('dropdown');
+                var overlay = document.getElementById('overlay');
+            
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    overlay.classList.remove('show');
+                }
+            }
+        });
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBarBox = document.getElementById('searchBarBox');
+            const searchInput = searchBarBox.querySelector('.search-bar-input');
+            
+            // Toggle the search bar input on click
+            searchBarBox.addEventListener('click', function(event) {
+                if (!searchInput.classList.contains('active')) {
+                    searchInput.classList.add('active');
+                }
+                event.stopPropagation(); // Prevents the document click listener from immediately closing the search bar
+            });
+        
+            // Close search bar input on document click
+            document.addEventListener('click', function(event) {
+                if (!searchBarBox.contains(event.target)) {
+                    searchInput.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
 </body>
-
-</html>
-
-
-
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>
-        TrueFeedback
-    </title>
-    <!--     FONT AWESOME     -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-    <link rel="stylesheet" href="/css/main-style.css"/>
-    <link rel="stylesheet" href="/css/topbar.css"/>
-    <!-- TITLE FONT -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+ES+Deco:wght@100..400&display=swap" rel="stylesheet">
-</head>
-
-<body>
-<div class="main-container">
-    <div class="topbar">
-        <a href="/">
-            <div class="title">
-                TrueFeedback
-            </div>
-        </a>
-        <div class="userInfo">
-            <div th:if="${userDetails}">
-                <span th:text="${userDetails.username}"></span>
-                <a href="/logout">Logout</a>
-            </div>
-            <div th:unless="${user}">
-                <a href="/login">Login</a>
-            </div>
-        </div>
-    </div>
-
-    <h2 th:text="${recipe.name}"></h2>
-    <img th:src="@{'/image/' + ${recipe.image.id}}" alt="Recipe Image">
-    <p th:text="${recipe.description}"></p>
-</div>
-</body>
-
 </html>

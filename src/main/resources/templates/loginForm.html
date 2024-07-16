@@ -8,12 +8,12 @@
 
     <link rel="stylesheet" href="/css/main-style.css"/>
     <link rel="stylesheet" href="/css/footer.css"/>
-/
+
     <link rel="stylesheet" href="/css/login.css"/>
 </head>
 
 <body>
-    <div class="logo"><a href="/">Gusto in tavola</a></div>
+    <a class="logo" href="/">Gusto in tavola</a>
     <form class="form" th:action="@{/login}" method="POST">
         <p class="form-title">Accedi</p>
         <div class="input-container">
@@ -28,6 +28,7 @@
         <button type="submit" class="submit">
             Continua
         </button>
+        <input type="hidden" name="referer" th:value="${referer}">
         <p class="signup-link">
             Non hai un account?
             <a th:href="@{/register}" th:text="Registrati">Registrati</a>

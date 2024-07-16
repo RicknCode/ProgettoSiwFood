@@ -14,8 +14,6 @@ public class Ingredient {
     private Long id;
     private String name;
     private int quantity;
-    @ManyToMany(mappedBy="ingredients")
-    private List<Recipe> recipes = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -39,14 +37,6 @@ public class Ingredient {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public List<Recipe> getRecipes() {
-        return recipes;
-    }
-
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
     }
 
     @Override
