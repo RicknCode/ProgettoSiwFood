@@ -152,8 +152,8 @@ public class RecipeController {
 	}
 
 	@PostMapping(value="/recipe/new/ingredients", consumes = "multipart/form-data")
-	public String newRecipeFirstPart(@Valid @ModelAttribute("recipe") Recipe recipe, @RequestParam("numIngredients") int numIngredients, @RequestPart("file") MultipartFile file, BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
+	public String newRecipeFirstPart(@Valid @ModelAttribute("recipe") Recipe recipe, BindingResult recipeBindingResult, @RequestParam("numIngredients") int numIngredients, @RequestPart("file") MultipartFile file, BindingResult bindingResult, Model model) {
+		if (recipeBindingResult.hasErrors() || bindingResult.hasErrors()) {
 			return "cook/formNewRecipe";
 		}
 		try {

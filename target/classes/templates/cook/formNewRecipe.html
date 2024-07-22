@@ -145,6 +145,7 @@
 			</div>
 			<div class="title">Aggiungi una ricetta<br><span>compila il form per aggiungere una ricetta</span></div>
 			<input class="input" type="text" th:field="${recipe.name}" placeholder="Nome della ricetta">
+			<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></div>
 
 			<div class="dropdown-container">
 				<div class="text">Categoria della ricetta:</div>
@@ -176,7 +177,7 @@
 			<input class="input" id="numIngredients" name="numIngredients" type="number"/>
 
 			<div class="text">Se vuoi fornisci un immagine della ricetta:</div>
-			<div>
+			<div class="input">
 				<input
 						name="file"
 						type="file"
